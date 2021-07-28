@@ -81,6 +81,7 @@ workflows:
             - test
             - lint
       - aws-ecr/build-and-push-image:
+          docker: *docker
           context: AWS
           repo: ci-cd
           tag: "latest,${CIRCLE_SHA1}"
