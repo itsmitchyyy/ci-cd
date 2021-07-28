@@ -91,7 +91,6 @@ workflows:
           repo: ci-cd
           tag: "${CIRCLE_SHA1}"
           path: .
-          remote-docker-layer-caching: true
           requires:
             - build
       - aws-ecs/deploy-service-update:
