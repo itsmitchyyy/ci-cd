@@ -86,7 +86,7 @@ workflows:
           tag: "latest,${CIRCLE_SHA1}"
           path: .
           remote-docker-layer-caching: true
-          setup_remote_docker: true
+          setup-remote-docker: true
           requires:
             - build
       - aws-ecs/deploy-service-update:
