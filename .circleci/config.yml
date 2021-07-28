@@ -97,7 +97,7 @@ workflows:
           context: AWS
           family: ci-cd-task
           cluster-name: 'ci-cd-cluster'
-          container-image-name-updates: "container=ci-cd-task,tag=${CIRCLE_SHA1}"
+          container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
           requires:
             - aws-ecr/build-and-push-image
       
