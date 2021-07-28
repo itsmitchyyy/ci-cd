@@ -1,18 +1,90 @@
 version: 2.1
 
+aliases:
+  - &docker
+    - image: cimg/node:15.1
+  - &restore_yarn_cache
+    restore_cache:
+      name: Restore yarn cache
+      key: v1-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
+  - &restore_node_modules_cache
+    restore_cache:
+      name:  Restore node_modules cache
+      keys: v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+
 orbs:
   node: circleci/node@4.1
+  aws-ecr: circleci/aws-ecr@7.0.0
 
 jobs:
-  hello-world:
-    docker:
-      - image: cimg/node:15.1
-    
+  setup:
+    docker: *docker
     steps:
       - checkout
-      - run: echo "Hello World"
+      - run:
+          name: NodeJS Version
+          command: node --version
+      - *restore_yarn_cache
+      - run:
+          name: Install Package
+          command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
+      - save_cache:
+          name: Save yarn cache for future installs
+          key: v1-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          name: Save node_modules cache
+          key: v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+          paths:
+            - node_modules
+
+  lint:
+    docker: *docker
+
+    steps:
+      - checkout
+      - *restore_node_modules_cache
+      - run: yarn lint
+  
+  test:
+    docker: *docker
+
+    steps:
+      - checkout
+      - *restore_node_modules_cache
+      - run: yarn test
+
+  build:
+    docker: *docker
+
+    steps:
+      - checkoout:
+      - *restore_node_modules_cache
+      - run: yarn build
+
+
 
 workflows:
   say-hello-world:
     jobs:
-      - hello-world
+      - setup
+      - test:
+          requires:
+            - setup
+      - lint:
+          requires:
+            - setup
+      - build:
+          requires:
+            - test
+            - lint
+      - aws-ecr/build-and-push-image:
+          context: AWS
+          repo: ci-cd
+          tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
+          dockerfile: Dockerfile
+          path: .
+          requires:
+            - build
+      
