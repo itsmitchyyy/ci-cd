@@ -20,7 +20,7 @@ orbs:
 executors:
   ecr-docker-build:
     machine:
-      use-docker-layer-caching: true
+      docker_layer_caching: true
 
 jobs:
   setup:
