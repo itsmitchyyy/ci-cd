@@ -59,7 +59,7 @@ jobs:
     docker: *docker
 
     steps:
-      - checkoout:
+      - checkout
       - *restore_node_modules_cache
       - run: yarn build
 
