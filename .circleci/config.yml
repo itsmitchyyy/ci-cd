@@ -84,11 +84,13 @@ workflows:
           context: AWS
           repo: ci-cd
           tag: "latest,${CIRCLE_SHA1}"
-          dockerfile: Dockerfile
           path: .
+          remote-docker-layer-caching: true
+          setup_remote_docker: true
           requires:
             - build
       - aws-ecs/deploy-service-update:
+          context: AWS
           family: ci-cd-task
           cluster-name: 'ci-cd-cluster'
           container-image-name-updates: "container=ci-cd-task,tag=${CIRCLE_SHA1}"
