@@ -10,9 +10,7 @@ jobs:
     
     steps:
       - checkout
-      - run:
-          name: Hello World
-          run: echo "Hello World"
+      - run: echo "Hello World"
 
 workflows:
   say-hello-world:
