@@ -81,13 +81,11 @@ workflows:
             - test
             - lint
       - aws-ecr/build-and-push-image:
-          docker: *docker
           context: AWS
           repo: ci-cd
           tag: "latest,${CIRCLE_SHA1}"
           path: .
           remote-docker-layer-caching: true
-          setup-remote-docker: true
           requires:
             - build
       - aws-ecs/deploy-service-update:
