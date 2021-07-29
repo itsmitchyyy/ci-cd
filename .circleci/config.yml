@@ -93,6 +93,10 @@ workflows:
           remote-docker-layer-caching: true
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - main
       - aws-ecs/deploy-service-update:
           context: AWS
           family: ci-cd-task
@@ -101,4 +105,8 @@ workflows:
           container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
           requires:
             - aws-ecr/build-and-push-image
+          filters:
+            branches:
+              only:
+                - main
       
