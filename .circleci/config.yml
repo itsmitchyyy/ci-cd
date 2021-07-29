@@ -14,8 +14,8 @@ aliases:
 
 orbs:
   node: circleci/node@4.1
-  aws-ecr: circleci/aws-ecr@7.0.0
-  aws-ecs: circleci/aws-ecs@2.2.1
+  # aws-ecr: circleci/aws-ecr@7.0.0
+  # aws-ecs: circleci/aws-ecs@2.2.1
 
 executors:
   ecr-docker-build:
@@ -85,28 +85,28 @@ workflows:
           requires:
             - test
             - lint
-      - aws-ecr/build-and-push-image:
-          context: AWS
-          repo: ci-cd
-          tag: "${CIRCLE_SHA1}"
-          path: .
-          remote-docker-layer-caching: true
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
-      - aws-ecs/deploy-service-update:
-          context: AWS
-          family: ci-cd-task
-          cluster-name: 'ci-cd'
-          service-name: 'ci-cd-service'
-          container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
-          requires:
-            - aws-ecr/build-and-push-image
-          filters:
-            branches:
-              only:
-                - main
+      # - aws-ecr/build-and-push-image:
+      #     context: AWS
+      #     repo: ci-cd
+      #     tag: "${CIRCLE_SHA1}"
+      #     path: .
+      #     remote-docker-layer-caching: true
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      # - aws-ecs/deploy-service-update:
+      #     context: AWS
+      #     family: ci-cd-task
+      #     cluster-name: 'ci-cd'
+      #     service-name: 'ci-cd-service'
+      #     container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
+      #     requires:
+      #       - aws-ecr/build-and-push-image
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
       
