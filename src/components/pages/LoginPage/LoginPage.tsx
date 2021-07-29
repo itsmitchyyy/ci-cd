@@ -1,9 +1,7 @@
-import { RouteComponentProps } from '@reach/router';
 import React from 'react';
 import { Login } from '../../templates/Login';
 
-type Props = Record<string, unknown> & RouteComponentProps;
-
-export default function LoginPage(props: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function LoginPage() {
   return <Login />;
 }
