@@ -31,6 +31,7 @@ jobs:
           name: NodeJS Version
           command: node --version
       - *restore_yarn_cache
+      - run: echo ${DOCKER_LOGIN}
       - run:
           name: Install Package
           command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
