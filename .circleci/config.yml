@@ -69,6 +69,23 @@ jobs:
       - *restore_node_modules_cache
       - run: yarn build
 
+  docker_hub_build_push_image:
+    docker: &docker
+    
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Build and push Docker image to Docker Hub
+          command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> ${BASH_ENV}
+            echo 'export IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}' >> ${BASH_ENV}
+            source ${BASH_ENV}
+            docker build -t ${DOCKER_LOGIN}/${IMAGE_NAME} -t ${DOCKER_LOGIN}/${IMAGE_NAME}:${TAG}
+            echo ${DOCKER_PWD} | docker login -u ${DOCKER_LOGIN} --password-stdin
+            docker push ${DOCKER_LOGIN}/${IMAGE_NAME}
+
 
 
 workflows:
@@ -85,28 +102,35 @@ workflows:
           requires:
             - test
             - lint
-      # - aws-ecr/build-and-push-image:
-      #     context: AWS
-      #     repo: ci-cd
-      #     tag: "${CIRCLE_SHA1}"
-      #     path: .
-      #     remote-docker-layer-caching: true
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      # - aws-ecs/deploy-service-update:
-      #     context: AWS
-      #     family: ci-cd-task
-      #     cluster-name: 'ci-cd'
-      #     service-name: 'ci-cd-service'
-      #     container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
-      #     requires:
-      #       - aws-ecr/build-and-push-image
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
+      - docker_hub_build_push_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+      - aws-ecr/build-and-push-image:
+          context: AWS
+          repo: ci-cd
+          tag: "latest,${CIRCLE_BUILD_NUM}"
+          path: .
+          remote-docker-layer-caching: true
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+      - aws-ecs/deploy-service-update:
+          context: AWS
+          family: ci-cd-task
+          cluster-name: 'ci-cd'
+          service-name: 'ci-cd-service'
+          container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
+          requires:
+            - aws-ecr/build-and-push-image
+          filters:
+            branches:
+              only:
+                - main
       
