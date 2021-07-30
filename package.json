@@ -28,6 +28,10 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
+  "jest-junit": {
+      "outputDirectory": "tmp/test_results/",
+      "outputName": "results.xml"
+  },
   "resolutions": {
     "babel-loader": "8.1.0"
   },
@@ -71,6 +75,7 @@
     "@types/styled-components": "^5.1.11",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest-junit": "^12.2.0",
     "prettier": "^2.3.2"
   }
 }
