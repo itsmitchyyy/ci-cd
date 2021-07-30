@@ -70,7 +70,7 @@ jobs:
       - run: yarn build
 
   docker_hub_build_push_image:
-    docker: &docker
+    docker: *docker
     
     steps:
       - checkout
@@ -126,7 +126,7 @@ workflows:
           family: ci-cd-task
           cluster-name: 'ci-cd'
           service-name: 'ci-cd-service'
-          container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_SHA1}"
+          container-image-name-updates: "container=ci-cd-container,tag=${CIRCLE_BUILD_NUM}"
           requires:
             - aws-ecr/build-and-push-image
           filters:
