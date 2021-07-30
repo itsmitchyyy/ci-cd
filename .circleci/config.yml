@@ -76,7 +76,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 19.03.13
-          docker_layer_caching: false
+          docker_layer_caching: true
       - run:
           name: Build and push Docker image to Docker Hub
           command: |
@@ -86,8 +86,6 @@ jobs:
             docker build -t $DOCKER_LOGIN/${IMAGE_NAME} -t $DOCKER_LOGIN/${IMAGE_NAME}:${TAG} .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push $DOCKER_LOGIN/${IMAGE_NAME}
-
-
 
 workflows:
   build-and-deploy:
