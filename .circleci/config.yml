@@ -60,6 +60,11 @@ jobs:
       - checkout
       - *restore_node_modules_cache
       - run: yarn test
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: results
+      - store_test_results:
+          path: /tmp/test-results
 
   build:
     docker: *docker
