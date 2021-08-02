@@ -8,6 +8,7 @@ const ButtonWrapper = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
+  flex: 1;
 
   &.end {
     justify-content: flex-end;
