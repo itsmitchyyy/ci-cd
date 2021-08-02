@@ -17,11 +17,6 @@ orbs:
   aws-ecr: circleci/aws-ecr@7.0.0
   aws-ecs: circleci/aws-ecs@2.2.1
 
-executors:
-  ecr-docker-build:
-    machine:
-      docker_layer_caching: true
-
 jobs:
   setup:
     docker: *docker
