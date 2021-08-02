@@ -26,9 +26,9 @@ export default function Login({ formData, onClickForgotPassword }: Props) {
         <LoginForm layout="vertical" formData={formData} />
         <ForgotPasswordContainer>
           <span>
-            Forgot your password?{' '}
+            Forgot your password?
             <Button type="link" onClick={onClickForgotPassword}>
-              Reset your password
+              Click here
             </Button>
           </span>
         </ForgotPasswordContainer>
