@@ -11,10 +11,11 @@ import {
 
 type Props = {
   formData?: { username: string; password: string };
+  onClickForgotPassword?: () => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Login({ formData }: Props) {
+export default function Login({ formData, onClickForgotPassword }: Props) {
   return (
     <FormWrapper>
       <FormContainer>
@@ -23,10 +24,12 @@ export default function Login({ formData }: Props) {
         </HeaderContainer>
 
         <LoginForm layout="vertical" formData={formData} />
-        <Button type="primary">Login</Button>
         <ForgotPasswordContainer>
           <span>
-            Forgot your password? <a href="#">Reset Password</a>
+            Forgot your password?{' '}
+            <Button type="link" onClick={onClickForgotPassword}>
+              Reset your password
+            </Button>
           </span>
         </ForgotPasswordContainer>
       </FormContainer>
