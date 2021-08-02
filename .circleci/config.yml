@@ -131,7 +131,6 @@ workflows:
           cluster-name:  $ECS_CLUSTER_NAME
           service-name: $ECS_SERVICE_NAME
           container-image-name-updates: "container=$ECS_CONTAINER,tag=${CIRCLE_SHA1}"
-          verify-revision-is-deployed: true
           requires:
             - aws-ecr/build-and-push-image
           filters:
