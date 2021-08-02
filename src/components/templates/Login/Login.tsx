@@ -28,7 +28,7 @@ export default function Login({ formData, onClickForgotPassword }: Props) {
           <span>
             Forgot your password?{' '}
             <Button type="link" onClick={onClickForgotPassword}>
-              Reset your password e
+              Reset your password
             </Button>
           </span>
         </ForgotPasswordContainer>
