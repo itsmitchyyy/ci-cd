@@ -1,6 +1,7 @@
 import React from 'react';
+import { Button } from '../../atoms/Button';
 import { TextInput } from '../../atoms/TextInput';
-import { StyledForm } from './elements';
+import { ButtonWrapper, StyledForm } from './elements';
 
 type Props = {
   layout?: 'horizontal' | 'vertical' | 'inline';
@@ -25,6 +26,10 @@ export default function LoginForm({ layout, formData }: Props) {
           placeholder="Password"
         />
       </StyledForm.Item>
+
+      <ButtonWrapper>
+        <Button type="primary">Login</Button>
+      </ButtonWrapper>
     </StyledForm>
   );
 }
