@@ -6,12 +6,13 @@ type Props = {
   children?: React.ReactNode;
   type?: ButtonType;
   loading?: boolean;
+  onClick?: () => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Button({ children, type, ...extra }: Props) {
+export default function Button({ children, type, onClick, ...extra }: Props) {
   return (
-    <StyledButton type={type} {...extra}>
+    <StyledButton type={type} onClick={onClick} {...extra}>
       {children}
     </StyledButton>
   );
