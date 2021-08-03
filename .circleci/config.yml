@@ -61,6 +61,7 @@ jobs:
           command: yarn test
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
+      - run: ls
       - store_artifacts:
           path: ./reports/junit
       - store_test_results:
@@ -114,13 +115,13 @@ workflows:
       - test:
           requires:
             - setup
-      - lint:
-          requires:
-            - setup
-      - build:
-          requires:
-            - test
-            - lint
+      # - lint:
+      #     requires:
+      #       - setup
+      # - build:
+      #     requires:
+      #       - test
+      #       - lint
       # - docker_hub_build_push_image:
       #     context: DOCKER
       #     requires:
@@ -129,14 +130,14 @@ workflows:
       #       branches:
       #         only:
       #           - main
-      - deploy:
-          context: AWS
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
+      # - deploy:
+      #     context: AWS
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
       # - aws-ecr/build-and-push-image:
       #     context: 
       #       - AWS
