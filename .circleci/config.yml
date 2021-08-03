@@ -14,6 +14,13 @@ aliases:
       name: Restore node_modules cache
       key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
+executors:
+  linux:
+    docker: *docker
+  macos:
+    macos:
+      xcode: 12.0
+
 orbs:
   node: circleci/node@4.1
   # aws-ecr: circleci/aws-ecr@7.0.0
@@ -51,8 +58,10 @@ jobs:
       - run: yarn lint
   
   test:
-    docker: *docker
-
+    parameters:
+      os:
+        type: executor
+    executor: << parameters.os >>
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -112,16 +121,15 @@ workflows:
     jobs:
       - setup
       - test:
+          matrix:
+            parameters:
+                os: [macos, linux]
           requires:
             - setup
       - lint:
           requires:
             - setup
       - build:
-          matrix:
-            parameters:
-              version: ["0.1", "0.2", "0,3"]
-              platform: ["macos", "windows", "linux"]
           requires:
             - test
             - lint
