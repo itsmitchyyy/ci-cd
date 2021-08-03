@@ -118,6 +118,9 @@ workflows:
           requires:
             - setup
       - build:
+          matrix:
+            parameters:
+              platform: ['macos', 'windows', 'linux']
           requires:
             - test
             - lint
