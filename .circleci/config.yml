@@ -105,7 +105,7 @@ jobs:
             sudo pip3 install awscli --upgrade
       - *restore_node_modules_cache
       - run: yarn build
-      - run: aws s3 sync build s3://ci-cd-research
+      - run: aws s3 sync build s3://$AWS_S3_BUCKET
 
 workflows:
   build-and-deploy:
@@ -130,7 +130,9 @@ workflows:
               only:
                 - main
       - deploy:
-          context: AWS
+          context: 
+            - AWS
+            - S3
           requires:
             - build
           filters:
