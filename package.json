@@ -28,10 +28,6 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
-  "jest-junit": {
-      "outputDirectory": "reports/junit",
-      "outputName": "results.xml"
-  },
   "resolutions": {
     "babel-loader": "8.1.0"
   },
