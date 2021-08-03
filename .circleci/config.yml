@@ -19,7 +19,7 @@ executors:
     docker: *docker
   macos:
     macos:
-      xcode: 12.0
+      xcode: 12.0.1
 
 orbs:
   node: circleci/node@4.1
@@ -59,9 +59,9 @@ jobs:
   
   test:
     parameters:
-      os:
+      platform:
         type: executor
-    executor: << parameters.os >>
+    executor: << parameters.platform >>
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -123,7 +123,7 @@ workflows:
       - test:
           matrix:
             parameters:
-                os: [macos, linux]
+                platform: ["macos", "linux"]
           requires:
             - setup
       - lint:
