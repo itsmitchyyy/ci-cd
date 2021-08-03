@@ -123,7 +123,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              platform: ["macos", "linux"]
+              platform: ["macos", "linux"]
           requires:
             - setup
       - lint:
