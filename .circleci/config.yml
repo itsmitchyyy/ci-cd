@@ -17,9 +17,15 @@ aliases:
 executors:
   linux:
     docker: *docker
-  macos:
-    macos:
-      xcode: 12.0.1
+  windows:
+    machine:
+      image: windows-server-2019-vs2019:stable
+      resource_class: windows.medium
+      shell: powershell.exe
+  # macos:
+  #   macos:
+  #     xcode: 12.0.1
+  # paid plans only
 
 orbs:
   node: circleci/node@4.1
@@ -123,7 +129,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              platform: ["macos", "linux"]
+              platform: ["windows", "linux"]
           requires:
             - setup
       - lint:
