@@ -14,19 +14,6 @@ aliases:
       name: Restore node_modules cache
       key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
-executors:
-  linux:
-    docker: *docker
-  windows:
-    machine:
-      image: windows-server-2019-vs2019:stable
-      resource_class: windows.medium
-      shell: powershell.exe
-  # macos:
-  #   macos:
-  #     xcode: 12.0.1
-  # paid plans only
-
 orbs:
   node: circleci/node@4.1
   # aws-ecr: circleci/aws-ecr@7.0.0
@@ -64,10 +51,8 @@ jobs:
       - run: yarn lint
   
   test:
-    parameters:
-      platform:
-        type: executor
-    executor: << parameters.platform >>
+    docker: *docker
+
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -127,9 +112,6 @@ workflows:
     jobs:
       - setup
       - test:
-          matrix:
-            parameters:
-              platform: ["windows", "linux"]
           requires:
             - setup
       - lint:
