@@ -93,15 +93,15 @@ jobs:
 
     steps:
       - checkout
+      - *restore_node_modules_cache
       - run:
           name: Installing AWS CLI
           command: |
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
-      - run: pwd
-      - run: ls
-      - run: aws s3 sync build/ s3://ci-cd-research
+      - run: yarn build
+      - run: aws s3 sync build s3://ci-cd-research
 
 workflows:
   build-and-deploy:
