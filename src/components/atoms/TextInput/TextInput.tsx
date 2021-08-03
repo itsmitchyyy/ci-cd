@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledInput } from './elements';
 
 type Props = {
-  type: 'email' | 'text' | 'password';
+  type: 'email' | 'text' | 'password' | 'number';
   value?: string;
   placeholder?: string;
 };
