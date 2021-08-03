@@ -12,7 +12,7 @@
 /build
 
 # testing results
-/tmp
+/reports
 
 # misc
 .DS_Store
