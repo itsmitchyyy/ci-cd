@@ -90,7 +90,7 @@ jobs:
             docker push $DOCKER_LOGIN/${IMAGE_NAME}
 
   deploy:
-    *machine
+    - *machine
 
     steps:
       - checkout
