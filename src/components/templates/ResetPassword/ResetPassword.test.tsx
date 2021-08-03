@@ -21,13 +21,5 @@ describe('ResetPassword', () => {
 
       expect(button).toBeInTheDocument();
     });
-
-    it('should render back to login link', () => {
-      render(<ResetPassword />);
-
-      const button = screen.getByText('Back to login');
-
-      expect(button).toBeInTheDocument();
-    });
   });
 });

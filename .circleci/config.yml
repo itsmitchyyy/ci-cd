@@ -33,7 +33,7 @@ jobs:
           command: yarn --frozen-lockfile --cache-folder ~/.cache/yarn
       - save_cache:
           name: Save yarn cache for future installs
-          key: v1-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
+          key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
           paths:
             - ~/.cache/yarn
       - save_cache:
@@ -62,9 +62,9 @@ jobs:
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
       - store_artifacts:
-          path: /reports/junit
+          path: ./reports/junit
       - store_test_results:
-          path: /reports/junit/
+          path: ./reports/junit/
 
   build:
     docker: *docker
@@ -103,6 +103,8 @@ jobs:
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awscli --upgrade
+      - *restore_node_modules_cache
+      - run: yarn build
       - run: aws s3 sync build s3://ci-cd-research
 
 workflows:
