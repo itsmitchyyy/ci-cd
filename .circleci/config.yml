@@ -56,7 +56,11 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules_cache
-      - run: yarn test
+      - run: 
+          name: Run tests with JUnit as a reporter
+          command: yarn test
+          environment:
+              JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
       - store_artifacts:
           path: /reports/junit
       - store_test_results:
@@ -93,13 +97,13 @@ jobs:
 
     steps:
       - checkout
-      - *restore_node_modules_cache
       - run:
           name: Installing AWS CLI
           command: |
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awsebcli --upgrade
+      - *restore_node_modules_cache
       - run: yarn build
       - run: aws s3 sync build s3://ci-cd-research
 
