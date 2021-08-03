@@ -8,11 +8,11 @@ aliases:
   - &restore_yarn_cache
     restore_cache:
       name: Restore yarn cache
-      key: v1-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
+      key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
   - &restore_node_modules_cache
     restore_cache:
       name: Restore node_modules cache
-      key: v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+      key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
 orbs:
   node: circleci/node@4.1
@@ -38,7 +38,7 @@ jobs:
             - ~/.cache/yarn
       - save_cache:
           name: Save node_modules cache
-          key: v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+          key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
           paths:
             - node_modules
 
@@ -103,8 +103,6 @@ jobs:
             sudo apt-get update
             sudo apt install python3-pip
             sudo pip3 install awscli --upgrade
-      - *restore_node_modules_cache
-      - run: yarn build
       - run: aws s3 sync build s3://ci-cd-research
 
 workflows:
