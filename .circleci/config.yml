@@ -2,7 +2,8 @@ version: 2.1
 
 aliases:
   - &machine
-    - image: ubuntu-2004:202010-01
+    machine: 
+      image: ubuntu-2004:202010-01
   - &docker
     - image: cimg/node:15.1
   - &restore_yarn_cache
@@ -89,7 +90,7 @@ jobs:
             docker push $DOCKER_LOGIN/${IMAGE_NAME}
 
   deploy:
-    machine: *machine
+    *machine
 
     steps:
       - checkout
