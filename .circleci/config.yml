@@ -14,6 +14,9 @@ aliases:
       name: Restore node_modules cache
       key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
+defaults: &defaults
+  docker: *docker
+
 orbs:
   node: circleci/node@4.1
   aws-ecr: circleci/aws-ecr@7.0.0
@@ -43,16 +46,14 @@ jobs:
             - node_modules
 
   lint:
-    docker: *docker
-
+    <<: *defaults
     steps:
       - checkout
       - *restore_node_modules_cache
       - run: yarn lint
   
   test:
-    docker: *docker
-
+    <<: *defaults
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -67,16 +68,14 @@ jobs:
           path: ./reports/junit/
 
   build:
-    docker: *docker
-
+    <<: *defaults
     steps:
       - checkout
       - *restore_node_modules_cache
       - run: yarn build
 
   docker_hub_build_push_image:
-    docker: *docker
-    
+    <<: *defaults
     steps:
       - checkout
       - setup_remote_docker:
@@ -93,8 +92,7 @@ jobs:
             docker push $DOCKER_LOGIN/${IMAGE_NAME}
 
   deploy:
-    docker: *docker
-
+    <<: *defaults
     steps:
       - checkout
       - run:
