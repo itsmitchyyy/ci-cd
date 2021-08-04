@@ -158,7 +158,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           context: 
             - AWS
-            - ECSa
+            - ECS
           family: $ECS_FAMILY
           cluster-name:  $ECS_CLUSTER_NAME
           service-name: $ECS_SERVICE_NAME
