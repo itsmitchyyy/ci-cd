@@ -123,6 +123,10 @@ workflows:
           requires:
             - test
             - lint
+          filters:
+            branches:
+              only:
+                - main
       # - docker_hub_build_push_image:
       #     context: DOCKER
       #     requires:
