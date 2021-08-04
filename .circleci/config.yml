@@ -113,8 +113,6 @@ workflows:
     jobs:
       - setup
       - test:
-          context:
-            - CODECOV
           requires:
             - setup
       - lint:
