@@ -1,22 +1,12 @@
+import { Form } from 'antd';
 import styled from 'styled-components';
 
 const ButtonWrapper = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex: 1;
+const StyledForm = styled(Form)``;
 
-  &.end {
-    justify-content: flex-end;
-  }
-
-  &.start {
-    justify-content: flex-start;
-  }
-`;
-
-export { ButtonWrapper, ButtonContainer };
+export { StyledForm, ButtonWrapper };
