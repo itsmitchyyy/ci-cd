@@ -5,8 +5,12 @@ import { ButtonWrapper } from '../../organisms/LoginForm/elements';
 import { RegistrationForm } from '../../organisms/RegistrationForm';
 import { FormContainer, FormWrapper, HeaderContainer } from '../Login/elements';
 
+type Props = {
+  onClickLoginNow?: () => void;
+};
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Register() {
+export default function Register({ onClickLoginNow }: Props) {
   return (
     <FormWrapper>
       <FormContainer>
@@ -18,7 +22,9 @@ export default function Register() {
         <ButtonWrapper>
           <span>
             Already have an account?
-            <Button type="link">Login now</Button>
+            <Button type="link" onClick={onClickLoginNow}>
+              Login now
+            </Button>
           </span>
         </ButtonWrapper>
       </FormContainer>
