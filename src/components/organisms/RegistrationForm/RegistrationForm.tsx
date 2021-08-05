@@ -1,6 +1,8 @@
 import { Form } from 'antd';
 import React from 'react';
+import { Button } from '../../atoms/Button';
 import { TextInput } from '../../atoms/TextInput';
+import { ButtonWrapper } from './elements';
 
 type Props = {
   layout?: 'horizontal' | 'vertical' | 'inline';
@@ -27,6 +29,10 @@ export default function RegistrationForm({ layout, formData }: Props) {
       <Form.Item label="Phone" required>
         <TextInput type="number" value={formData?.phone} />
       </Form.Item>
+
+      <ButtonWrapper>
+        <Button type="primary">Create Account</Button>
+      </ButtonWrapper>
     </Form>
   );
 }
