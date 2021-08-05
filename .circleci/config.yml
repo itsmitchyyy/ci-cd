@@ -63,7 +63,7 @@ jobs:
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
       - store_artifacts:
-          path: ./reports/junit
+          path: ./coverage
       - store_test_results:
           path: ./reports/junit/
       - codecov/upload:
