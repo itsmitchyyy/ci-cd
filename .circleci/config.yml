@@ -21,7 +21,7 @@ aliases:
   - &environment
       TZ: /usr/share/zoneinfo/Asia/Manila 
 
-  # - &TEST_PARALLELISM 3
+  - &TEST_PARALLELISM 1
 
   - &attach_workspace
       at: build
@@ -67,7 +67,7 @@ jobs:
   
   test:
     <<: *defaults
-    # parallelism: *TEST_PARALLELISM
+    parallelism: *TEST_PARALLELISM
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -104,6 +104,12 @@ jobs:
       - run:
           name: Run test with cypress
           command: yarn run test:e2e
+      - store_test_results:
+          path: ./reports/e2e
+      - store_artifacts:
+          path: ./cypress/videos
+      - store_artifacts:
+          path: ./cypress/screenshots
   build:
     <<: *defaults
     steps:
@@ -170,7 +176,7 @@ workflows:
             - setup
       - build:
           requires:
-            - test
+            - test-cypress
             - lint
           filters:
             branches:
