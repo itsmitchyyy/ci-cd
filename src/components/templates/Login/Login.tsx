@@ -32,7 +32,10 @@ export default function Login({
         <ForgotPasswordContainer>
           <span>
             Don&apos;t have an account?
-            <Button type="link" onClick={onClickRegisterNow}>
+            <Button
+              type="link"
+              aria-controls="button-register"
+              onClick={onClickRegisterNow}>
               Register now
             </Button>
           </span>

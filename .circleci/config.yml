@@ -75,6 +75,7 @@ jobs:
       - run:
           name: Collect Code Coverage
           command: yarn test:coverage
+      - run: $(yarn bin)/cypress run --record --key cypress-{{ .Branch }}--{{ checksum "yarn.lock" }}
       - store_artifacts:
           path: ./coverage
       - store_test_results:
