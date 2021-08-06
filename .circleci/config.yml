@@ -103,7 +103,7 @@ jobs:
             - ~/.cache
       - run:
           name: Run test with cypress
-          command: $(yarn bin)/cypress --run --key CypressTestingKey
+          command: $(yarn bin)/cypress run --record --key CypressTestingKey
   build:
     <<: *defaults
     steps:
