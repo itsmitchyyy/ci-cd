@@ -9,10 +9,6 @@ aliases:
     restore_cache:
       name: Restore yarn cache
       key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
-  - &restore_cypress_cache
-    restore_cache:
-      name: Restore cypress cache
-      key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
   - &restore_node_modules_cache
     restore_cache:
       name: Restore node_modules cache
@@ -53,11 +49,6 @@ jobs:
           paths:
             - ~/.cache/yarn
       - save_cache:
-          name: Save Cypress cache for future installs
-          key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
-          paths:
-            - ~/.cache/Cypress
-      - save_cache:
           name: Save node_modules cache
           key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
           paths:
@@ -85,9 +76,6 @@ jobs:
       - run:
           name: Collect Code Coverage
           command: yarn test:coverage
-      - run: 
-          name: Run test with Cypress
-          command: $(yarn bin)/cypress run --record --key cypress-{{ .Branch }}--{{ checksum "yarn.lock" }}-cypress
       - store_artifacts:
           path: ./coverage
       - store_test_results:
@@ -95,6 +83,17 @@ jobs:
       - codecov/upload:
           file: ./coverage/clover.xml
 
+  test-cypress:
+    docker:
+      - image: cypress/bse:14.16.0
+        environment:
+          TERM: xterm
+    steps:
+      - checkout
+      - *restore_node_modules_cache
+      - run:
+          name: Run test with cypress
+          command: $(yarn bin)/cypress --run --key CypressTestingKey
   build:
     <<: *defaults
     steps:
@@ -153,6 +152,9 @@ workflows:
           context: CODECOV
           requires:
             - setup
+      - test-cypress:
+          requires:
+            - test
       - lint:
           requires:
             - setup
