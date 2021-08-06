@@ -62,6 +62,9 @@ jobs:
           command: yarn test
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
+      - run:
+          name: Collect Code Coverage
+          command: yarn test:coverage
       - store_artifacts:
           path: ./coverage
       - store_test_results:
