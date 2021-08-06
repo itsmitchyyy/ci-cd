@@ -6,6 +6,6 @@ import { Register } from '../../templates/Register';
 type Props = Record<string, string> & RouteComponentProps;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function LoginPage() {
-  return <Register />;
+export default function LoginPage({ history }: Props) {
+  return <Register onClickLoginNow={() => history.push('/')} />;
 }

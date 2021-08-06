@@ -23,6 +23,7 @@ const FormContainer = styled.div`
 const ForgotPasswordContainer = styled.div`
   margin: 1rem 0;
   display: flex;
+  flex-direction: column;
 `;
 
 export { FormContainer, HeaderContainer, ForgotPasswordContainer, FormWrapper };
