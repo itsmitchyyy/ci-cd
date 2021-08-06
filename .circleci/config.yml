@@ -14,8 +14,17 @@ aliases:
       name: Restore node_modules cache
       key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
+  - &environment
+      TZ: /usr/share/zoneinfo/Asia/Manila 
+
+  - &TEST_PARALLELISM 20
+
+  - &attach_workspace
+      at: build
+
 defaults: &defaults
   docker: *docker
+  environment: *environment
 
 orbs:
   aws-ecr: circleci/aws-ecr@7.0.0
@@ -54,6 +63,7 @@ jobs:
   
   test:
     <<: *defaults
+    parallelism: *TEST_PARALLELISM
     steps:
       - checkout
       - *restore_node_modules_cache
