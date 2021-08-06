@@ -17,7 +17,7 @@ aliases:
   - &environment
       TZ: /usr/share/zoneinfo/Asia/Manila 
 
-  - &TEST_PARALLELISM 20
+  - &TEST_PARALLELISM 4
 
   - &attach_workspace
       at: build
