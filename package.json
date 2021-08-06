@@ -24,6 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --ci --runInBand --reporters=jest-junit",
     "test:coverage": "react-scripts test --watchAll=false --coverage",
+    "test:e2e": "cypress run --reporters=jest-junit",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
     "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
