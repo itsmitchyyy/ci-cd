@@ -13,11 +13,15 @@ aliases:
     restore_cache:
       name: Restore node_modules cache
       key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+  - &restore_cypress_cache
+    restore_cache:
+      name: Restore cypress cache
+      key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
 
   - &environment
       TZ: /usr/share/zoneinfo/Asia/Manila 
 
-  - &TEST_PARALLELISM 3
+  # - &TEST_PARALLELISM 3
 
   - &attach_workspace
       at: build
@@ -63,7 +67,7 @@ jobs:
   
   test:
     <<: *defaults
-    parallelism: *TEST_PARALLELISM
+    # parallelism: *TEST_PARALLELISM
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -89,7 +93,14 @@ jobs:
           TERM: xterm
     steps:
       - checkout
-      - *restore_node_modules_cache
+      - *restore_cypress_cache
+      - run:
+          name: Install Package
+          command: yarn --frozen-lockfile
+      - save_cache:
+          key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
+          paths:
+            - ~/.cache
       - run:
           name: Run test with cypress
           command: $(yarn bin)/cypress --run --key CypressTestingKey
