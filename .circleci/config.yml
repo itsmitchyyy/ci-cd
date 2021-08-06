@@ -56,7 +56,7 @@ jobs:
           name: Save Cypress cache for future installs
           key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
           paths:
-            ` ~/.cache/Cypress
+            - ~/.cache/Cypress
       - save_cache:
           name: Save node_modules cache
           key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
