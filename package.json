@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --ci --runInBand --reporters=jest-junit",
-    "test:coverage": "react-scripts test --watchAll --coverage",
+    "test:coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
     "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
