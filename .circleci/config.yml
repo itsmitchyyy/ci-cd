@@ -9,6 +9,10 @@ aliases:
     restore_cache:
       name: Restore yarn cache
       key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-yarn
+  - &restore_cypress_cache
+    restore_cache:
+      name: Restore cypress cache
+      key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
   - &restore_node_modules_cache
     restore_cache:
       name: Restore node_modules cache
@@ -17,7 +21,7 @@ aliases:
   - &environment
       TZ: /usr/share/zoneinfo/Asia/Manila 
 
-  - &TEST_PARALLELISM 4
+  - &TEST_PARALLELISM 3
 
   - &attach_workspace
       at: build
@@ -49,6 +53,11 @@ jobs:
           paths:
             - ~/.cache/yarn
       - save_cache:
+          name: Save Cypress cache for future installs
+          key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
+          paths:
+            ` ~/.cache/Cypress
+      - save_cache:
           name: Save node_modules cache
           key: v2-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
           paths:
@@ -67,6 +76,7 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules_cache
+      - *restore_cypress_cache
       - run: 
           name: Run tests with JUnit as a reporter
           command: yarn test
@@ -75,7 +85,9 @@ jobs:
       - run:
           name: Collect Code Coverage
           command: yarn test:coverage
-      - run: $(yarn bin)/cypress run --record --key cypress-{{ .Branch }}--{{ checksum "yarn.lock" }}
+      - run: 
+          name: Run test with Cypress
+          command: $(yarn bin)/cypress run --record --key cypress-{{ .Branch }}--{{ checksum "yarn.lock" }}-cypress
       - store_artifacts:
           path: ./coverage
       - store_test_results:
