@@ -101,7 +101,6 @@ jobs:
           key: v2-node-{{ arch }}-{{ checksum "yarn.lock" }}-cypress
           paths:
             - ~/.cache
-      - run: yarn start
       - run:
           name: Run test with cypress
           command: yarn run start-test:e2e
