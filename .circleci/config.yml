@@ -177,7 +177,7 @@ workflows:
             - test
       - build:
           requires:
-            - test-cypress
+            - test-e2e
             - lint
           filters:
             branches:
