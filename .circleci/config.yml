@@ -169,12 +169,12 @@ workflows:
           context: CODECOV
           requires:
             - setup
-      - test-cypress:
-          requires:
-            - test
       - lint:
           requires:
             - setup
+      - test-e2e:
+          requires:
+            - test
       - build:
           requires:
             - test-cypress
