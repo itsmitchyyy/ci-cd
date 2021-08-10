@@ -86,10 +86,11 @@ jobs:
       - codecov/upload:
           file: ./coverage/clover.xml
 
-  test-cypress:
+  test-e2e:
     docker:
       - image: cypress/base:14.16.0
         environment:
+          ## this enables colors in the output
           TERM: xterm
     steps:
       - checkout
@@ -184,24 +185,24 @@ workflows:
                 - main
             tags:
               only: /^\d+\.\d+\.\d+$/
-      # - docker_hub_build_push_image:
-      #     context: DOCKER
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      # - deploy:
-      #     context: 
-      #       - AWS
-      #       - S3
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
+      - docker_hub_build_push_image:
+          context: DOCKER
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+      - deploy:
+          context: 
+            - AWS
+            - S3
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
       - publish-github-release:
           context: GITHUB
           requires:
