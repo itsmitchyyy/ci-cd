@@ -203,15 +203,15 @@ workflows:
             branches:
               only:
                 - main
-      - publish-github-release:
-          context: GITHUB
-          requires:
-            - build
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^\d+\.\d+\.\+$/
+      # - publish-github-release:
+      #     context: GITHUB
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         ignore: /.*/
+      #       tags:
+      #         only: /^\d+\.\d+\.\+$/
       - aws-ecr/build-and-push-image:
           context: 
             - AWS
