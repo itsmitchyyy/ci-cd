@@ -183,8 +183,8 @@ workflows:
             branches:
               only:
                 - main
-            tags:
-              only: /^\d+\.\d+\.\d+$/
+            # tags:
+            #   only: /^\d+\.\d+\.\d+$/
       - docker_hub_build_push_image:
           context: DOCKER
           requires:
