@@ -149,18 +149,6 @@ jobs:
       - run: yarn build
       - run: aws s3 sync build s3://$AWS_S3_BUCKET
 
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - attach_workspace:
-          at: ./artifacts
-      - run:
-          name: Publish Release on GitHub
-          command: |
-            VERSION=${my-binary --version}
-            ghr -t $GITHUB_TOKEN -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} - c ${CIRCLE_SHA1} - delete ${VERSION} ./artifacts
-
 workflows:
   build-and-deploy:
     jobs:
@@ -183,8 +171,6 @@ workflows:
             branches:
               only:
                 - main
-            # tags:
-            #   only: /^\d+\.\d+\.\d+$/
       - docker_hub_build_push_image:
           context: DOCKER
           requires:
@@ -203,15 +189,6 @@ workflows:
             branches:
               only:
                 - main
-      # - publish-github-release:
-      #     context: GITHUB
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         ignore: /.*/
-      #       tags:
-      #         only: /^\d+\.\d+\.\+$/
       - aws-ecr/build-and-push-image:
           context: 
             - AWS
