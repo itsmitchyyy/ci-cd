@@ -36,7 +36,7 @@ export default function Login({
               type="link"
               aria-controls="button-register"
               onClick={onClickRegisterNow}>
-              Register now
+              Register here
             </Button>
           </span>
           <span>
