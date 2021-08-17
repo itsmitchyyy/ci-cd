@@ -24,7 +24,7 @@ aliases:
   - &TEST_PARALLELISM 2
 
   - &attach_workspace
-      at: build5t%$R7?>>>>>>>>>>>>>>>>>>>>>
+      at: build
 
 defaults: &defaults
   docker: *docker
@@ -111,6 +111,7 @@ jobs:
           path: ./cypress/videos
       - store_artifacts:
           path: ./cypress/screenshots
+
   build:
     <<: *defaults
     steps:
@@ -171,24 +172,24 @@ workflows:
             branches:
               only:
                 - main
-      - docker_hub_build_push_image:
-          context: DOCKER
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
-      - deploy:
-          context: 
-            - AWS
-            - S3
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
+      # - docker_hub_build_push_image:
+      #     context: DOCKER
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      # - deploy:
+      #     context: 
+      #       - AWS
+      #       - S3
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
       - aws-ecr/build-and-push-image:
           context: 
             - AWS
