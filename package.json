@@ -23,7 +23,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --ci --runInBand --reporters=jest-junit",
-    "test:coverage": "react-scripts test --watchAll=false --coverage",
     "test:e2e": "cypress run --reporter junit --reporter-options 'mochaFile=reports/e2e/results.xml'",
     "start-test:e2e": "start-server-and-test start http://localhost:3000 test:e2e",
     "eject": "react-scripts eject",
