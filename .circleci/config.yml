@@ -76,15 +76,8 @@ jobs:
           command: yarn test
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
-      - run:
-          name: Collect Code Coverage
-          command: yarn test:coverage
-      - store_artifacts:
-          path: ./coverage
       - store_test_results:
           path: ./reports/junit/
-      - codecov/upload:
-          file: ./coverage/clover.xml
 
   test-e2e:
     docker:
@@ -155,7 +148,6 @@ workflows:
     jobs:
       - setup
       - test:
-          context: CODECOV
           requires:
             - setup
       - lint:
@@ -204,18 +196,18 @@ workflows:
             branches:
               only:
                 - main
-      - aws-ecs/deploy-service-update:
-          context: 
-            - AWS
-            - ECS
-          family: $ECS_FAMILY
-          cluster-name:  $ECS_CLUSTER_NAME
-          service-name: $ECS_SERVICE_NAME
-          container-image-name-updates: "container=$ECS_CONTAINER,tag=${CIRCLE_SHA1}"
-          requires:
-            - aws-ecr/build-and-push-image
-          filters:
-            branches:
-              only:
-                - main
+      # - aws-ecs/deploy-service-update:
+      #     context: 
+      #       - AWS
+      #       - ECS
+      #     family: $ECS_FAMILY
+      #     cluster-name:  $ECS_CLUSTER_NAME
+      #     service-name: $ECS_SERVICE_NAME
+      #     container-image-name-updates: "container=$ECS_CONTAINER,tag=${CIRCLE_SHA1}"
+      #     requires:
+      #       - aws-ecr/build-and-push-image
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
       
