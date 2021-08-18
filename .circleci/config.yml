@@ -76,8 +76,15 @@ jobs:
           command: yarn test
           environment:
               JEST_JUNIT_OUTPUR_DIR: ./reports/junit/
+      - run:
+          name: Collect Code Coverage
+          command: yarn test:coverage
+      - store_artifacts:
+          path: ./coverage
       - store_test_results:
           path: ./reports/junit/
+      - codecov/upload:
+          file: ./coverage/clover.xml
 
   test-e2e:
     docker:
@@ -148,6 +155,7 @@ workflows:
     jobs:
       - setup
       - test:
+          context: CODECOV
           requires:
             - setup
       - lint:
