@@ -31,8 +31,6 @@ defaults: &defaults
   environment: *environment
 
 orbs:
-  aws-ecr: circleci/aws-ecr@7.0.0
-  aws-ecs: circleci/aws-ecs@2.2.1
   codecov: codecov/codecov@1.0.2
 
 jobs:
@@ -119,23 +117,6 @@ jobs:
       - *restore_node_modules_cache
       - run: yarn build
 
-  docker_hub_build_push_image:
-    <<: *defaults
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: false
-      - run:
-          name: Build and push Docker image to Docker Hub
-          command: |
-            echo 'export TAG=${CIRCLE_SHA1}' >> ${BASH_ENV}
-            echo 'export IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}' >> ${BASH_ENV}
-            source ${BASH_ENV}
-            docker build -t $DOCKER_LOGIN/${IMAGE_NAME} -t $DOCKER_LOGIN/${IMAGE_NAME}:${TAG} .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push $DOCKER_LOGIN/${IMAGE_NAME}
-
   deploy:
     <<: *defaults
     steps:
@@ -172,50 +153,4 @@ workflows:
             branches:
               only:
                 - main
-      # - docker_hub_build_push_image:
-      #     context: DOCKER
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      # - deploy:
-      #     context: 
-      #       - AWS
-      #       - S3
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      - aws-ecr/build-and-push-image:
-          context: 
-            - AWS
-            - ECR
-          repo: $ECR_REPO
-          tag: "latest,${CIRCLE_SHA1}"
-          path: .
-          remote-docker-layer-caching: true
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
-      # - aws-ecs/deploy-service-update:
-      #     context: 
-      #       - AWS
-      #       - ECS
-      #     family: $ECS_FAMILY
-      #     cluster-name:  $ECS_CLUSTER_NAME
-      #     service-name: $ECS_SERVICE_NAME
-      #     container-image-name-updates: "container=$ECS_CONTAINER,tag=${CIRCLE_SHA1}"
-      #     requires:
-      #       - aws-ecr/build-and-push-image
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
       
