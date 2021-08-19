@@ -33,7 +33,7 @@ defaults: &defaults
 test-defaults: &test-defaults
   parameters:
       os:
-        type: string
+        type: executor
   executor: << parameters.os >>
   environment: *environment
 
