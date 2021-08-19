@@ -30,7 +30,7 @@ defaults: &defaults
   docker: *docker
   environment: *environment
 
-defaults: &test-defaults
+test-defaults: &test-defaults
   parameters:
       os:
         type: string
