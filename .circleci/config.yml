@@ -181,7 +181,9 @@ workflows:
       - test:
           matrix:
             parameters:
-              os: ["win", "linux"]
+              os: 
+                - linux
+                - win
           context: CODECOV
           requires:
             - setup
