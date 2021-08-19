@@ -30,10 +30,26 @@ defaults: &defaults
   docker: *docker
   environment: *environment
 
+defaults: &test-defaults
+  parameters:
+      os:
+        type: string
+  executor: << parameters.os >>
+  environment: *environment
+
+
 orbs:
   # aws-ecr: circleci/aws-ecr@7.0.0
   # aws-ecs: circleci/aws-ecs@2.2.1
   codecov: codecov/codecov@1.0.2
+
+executors:
+  linux: *docker
+  win:
+    machine:
+      image: windows-server-2019-vs2019:stable
+      resource_class: windows.medium
+      shell: powershell.exe 
 
 jobs:
   # setup app
@@ -69,7 +85,7 @@ jobs:
   
   # testing
   test:
-    <<: *defaults
+    <<: *test-defaults
     parallelism: *TEST_PARALLELISM
     steps:
       - checkout
@@ -163,6 +179,9 @@ workflows:
     jobs:
       - setup
       - test:
+          matrix:
+            parameters:
+              os: ["win", "linux"]
           context: CODECOV
           requires:
             - setup
