@@ -44,7 +44,8 @@ orbs:
   codecov: codecov/codecov@1.0.2
 
 executors:
-  linux: *docker
+  linux: 
+    docker: *docker
   win:
     machine:
       image: windows-server-2019-vs2019:stable
