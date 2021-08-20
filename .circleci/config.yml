@@ -86,7 +86,7 @@ jobs:
   
   # testing
   test:
-    <<: *test-defaults
+    <<: *defaults
     parallelism: *TEST_PARALLELISM
     steps:
       - checkout
@@ -184,11 +184,6 @@ workflows:
                 - linux
                 - win
       - test:
-          matrix:
-            parameters:
-              os: 
-                - linux
-                - win
           context: CODECOV
           requires:
             - setup
