@@ -50,7 +50,7 @@ executors:
     machine:
       image: windows-server-2019-vs2019:stable
       resource_class: windows.medium
-      shell: powershell.exe 
+      shell: bash
 
 jobs:
   # setup app
@@ -86,7 +86,7 @@ jobs:
   
   # testing
   test:
-    <<: *defaults
+    <<: *test-defaults
     parallelism: *TEST_PARALLELISM
     steps:
       - checkout
@@ -185,6 +185,11 @@ workflows:
                 - win
       - test:
           context: CODECOV
+          matrix:
+            parameters:
+              os:
+                - linux
+                - win
           requires:
             - setup
       - lint:
