@@ -46,7 +46,7 @@ orbs:
 executors:
   linux: 
     docker: *docker
-  win:
+  win: &windows-executor
     machine:
       image: windows-server-2019-vs2019:stable
       resource_class: windows.medium
@@ -55,7 +55,7 @@ executors:
 jobs:
   # setup app
   setup:
-    docker: *docker
+    <<: *test-defaults
     steps:
       - checkout
       - run:
@@ -91,7 +91,6 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules_cache
-      # run test
       - run: 
           name: Run tests with JUnit as a reporter
           command: yarn test
@@ -178,7 +177,12 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - setup
+      - setup:
+          matrix:
+            parameters:
+              os:
+                - linux
+                - win
       - test:
           matrix:
             parameters:
