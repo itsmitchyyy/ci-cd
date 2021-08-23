@@ -82,7 +82,7 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules_cache
-      when:
+      - when:
         condition: 
             equal: [ *windows-executor, << parameters.os >> ]
           steps:
