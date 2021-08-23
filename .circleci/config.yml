@@ -30,7 +30,7 @@ defaults: &defaults
   docker: *docker
   environment: *environment
 
-test-defaults: &test-defaults
+defaults-with-params: &defaults-with-params
   parameters:
       os:
         type: executor
@@ -55,7 +55,7 @@ executors:
 jobs:
   # setup app
   setup:
-    <<: *test-defaults
+    <<: *defaults-with-params
     steps:
       - checkout
       - run:
@@ -78,7 +78,7 @@ jobs:
 
   # lint coe
   lint:
-    <<: *defaults
+    <<: *defaults-with-params
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -86,7 +86,7 @@ jobs:
   
   # testing
   test:
-    <<: *test-defaults
+    <<: *defaults-with-params
     parallelism: *TEST_PARALLELISM
     steps:
       - checkout
@@ -135,7 +135,7 @@ jobs:
           path: ./cypress/screenshots
 
   build:
-    <<: *defaults
+    <<: *defaults-with-params
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -193,12 +193,22 @@ workflows:
           requires:
             - setup
       - lint:
+          matrix:
+              parameters:
+                os:
+                  - linux
+                  - win
           requires:
             - setup
       - test-e2e:
           requires:
             - test
       - build:
+          matrix:
+            parameters:
+              os:
+                - linux
+                - win
           requires:
             - test-e2e
             - lint
