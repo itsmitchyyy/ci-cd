@@ -83,7 +83,7 @@ jobs:
       - checkout
       - *restore_node_modules_cache
       - when:
-        condition: 
+          condition: 
             equal: [ *windows-executor, << parameters.os >> ]
           steps:
             - run: yarn lint:fix
