@@ -193,26 +193,6 @@ workflows:
               os:
                 - linux
                 - win
-      - test:
-          context: CODECOV
-          matrix:
-            parameters:
-              os:
-                - linux
-                - win
-          requires:
-            - setup
-      - lint:
-          matrix:
-              parameters:
-                os:
-                  - linux
-                  - win
-          requires:
-            - setup
-      - test-e2e:
-          requires:
-            - test
       - build:
           matrix:
             parameters:
@@ -220,8 +200,7 @@ workflows:
                 - linux
                 - win
           requires:
-            - test-e2e
-            - lint
+            - setup
           filters:
             branches:
               only:
@@ -234,6 +213,27 @@ workflows:
             branches:
               only:
                 - main
+      - lint:
+          matrix:
+              parameters:
+                os:
+                  - linux
+                  - win
+          requires:
+            - docker_hub_build_push_image
+            - build
+      - test:
+          context: CODECOV
+          matrix:
+            parameters:
+              os:
+                - linux
+                - win
+          requires:
+            - lint
+      - test-e2e:
+          requires:
+            - test
       # - deploy:
       #     context: 
       #       - AWS
