@@ -141,6 +141,7 @@ jobs:
 
   build:
     <<: *defaults-with-params
+    parallelism: 3
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -233,7 +234,7 @@ workflows:
             - lint
       - test-e2e:
           requires:
-            - test
+            - lint
       # - deploy:
       #     context: 
       #       - AWS
