@@ -91,7 +91,7 @@ jobs:
   
   # testing
   test:
-    <<: *defaults-with-params
+    <<: *defaults
     parallelism: *TEST_PARALLELISM
     steps:
       - checkout
@@ -209,11 +209,6 @@ workflows:
             - build
       - test:
           context: CODECOV
-          matrix:
-            parameters:
-              os:
-                - linux
-                - win
           requires:
             - lint
       - test-e2e:
