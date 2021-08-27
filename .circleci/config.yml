@@ -55,7 +55,7 @@ executors:
 jobs:
   # setup app
   setup:
-    <<: *defaults-with-params
+    <<: *defaults
     steps:
       - checkout
       - run:
@@ -78,7 +78,7 @@ jobs:
 
   # lint coe
   lint:
-    <<: *defaults-with-params
+    <<: *defaults
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -140,7 +140,7 @@ jobs:
           path: ./cypress/screenshots
 
   build:
-    <<: *defaults-with-params
+    <<: *defaults
     steps:
       - checkout
       - *restore_node_modules_cache
@@ -187,18 +187,8 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - setup:
-          matrix:
-            parameters:
-              os:
-                - linux
-                - win
+      - setup
       - build:
-          matrix:
-            parameters:
-              os:
-                - linux
-                - win
           requires:
             - setup
           filters:
@@ -214,11 +204,6 @@ workflows:
               only:
                 - main
       - lint:
-          matrix:
-              parameters:
-                os:
-                  - linux
-                  - win
           requires:
             - docker_hub_build_push_image
             - build
