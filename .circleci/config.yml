@@ -10,6 +10,11 @@ jobs:
     steps:
       - checkout
       - run: echo "This is build job"
+  shell-test:
+    docker: *docker
+    steps:
+        - checkout
+        - run: ./scripts/demo/helloworld.sh
   test:
     docker: *docker
     steps: 
@@ -20,6 +25,13 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - shell-test:
+          requires:
+            - build
       - test:
           requires:
             - build
+          filters:
+              branches:
+                only:
+                  - main
