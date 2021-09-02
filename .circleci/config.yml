@@ -14,7 +14,12 @@ jobs:
     docker: *docker
     steps:
         - checkout
-        - run: ./scripts/demo/helloworld.sh
+        - run:
+            name: Run Shell Script File
+            command: |
+              cd ./scripts/demo
+              chmod 755 helloworld.sh
+              ./helloworld.sh
   test:
     docker: *docker
     steps: 
