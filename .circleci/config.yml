@@ -79,14 +79,14 @@ workflows:
       - setup
       - build:
           requires:
-              - setup
+            - setup
           filters:
             branches:
                 only:
                   - main
       - shell-test:
-        requires:
-          - build
+          requires:
+            - build
       - lint:
           requires: 
             - build
