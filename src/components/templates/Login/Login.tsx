@@ -42,7 +42,7 @@ export default function Login({
           <span>
             Forgot your password?
             <Button type="link" onClick={onClickForgotPassword}>
-              Click here to reset
+              Click here to resett
             </Button>
           </span>
         </ForgotPasswordContainer>
