@@ -3,13 +3,65 @@ version: 2.1
 aliases:
   - &docker
     - image: cimg/node:15.1
+  - &restore_yarn_cache
+    restore_cache:
+      name: Restore Yarn Cache
+      key: v1-node-{{ checksum "yarn.lock" }}-yarn
+  - &restore_node_modules_cache
+    restore_cache:
+      name: Restore Node Modules Cache
+      key: v1-node--{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
 jobs:
+  setup:
+    docker: *docker
+    steps:
+      - checkout
+      - *restore_yarn_cache
+      - run: yarn -- frozen-lockfile --cache-folder ~/.cache/yarn
+      - save_cache:
+          name: Save yarn cache
+          key: v1-node-{{ checksum "yarn.lock" }}-yarn
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          name: Save node_modules cache
+          key: v1-node--{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
+          paths:
+            - node_modules
+
   build:
     docker: *docker
     steps:
       - checkout
-      - run: echo "This is build job"
+      - *restore_node_modules_cache
+      - run: yarn build
+
+  lint:
+    docker: *docker
+    steps:
+      - checkout
+      - *restore_node_modules_cache
+      - run: yarn lint
+  
+  test:
+    docker: *docker
+    steps: 
+      - checkout
+      - *restore_node_modules_cache
+      - run: yarn test
+      - store_test_results:
+          path: ./reports/junit/
+  
+  test-coverage:
+    docker: *docker
+    steps:
+      - checkout
+      - *restore_node_modules_cache
+      - run: yarn test:coverage
+      - store_artifacts:
+          path: ./coverage
+
   shell-test:
     docker: *docker
     steps:
@@ -20,23 +72,27 @@ jobs:
               cd ./scripts/demo
               chmod 755 helloworld.sh
               ./helloworld.sh
-  test:
-    docker: *docker
-    steps: 
-      - checkout
-      - run: echo "This is test job"
 
 workflows:
   build_and_test:
     jobs:
-      - build
-      - shell-test:
+      - setup
+      - build:
           requires:
+              - setup
+          filters:
+            branches:
+                only:
+                  - main
+      - shell-test:
+        requires:
+          - build
+      - lint:
+          requires: 
             - build
       - test:
           requires:
-            - build
-          filters:
-              branches:
-                only:
-                  - main
+            - lint
+      - test-coverage:
+          requires:
+            - lint
