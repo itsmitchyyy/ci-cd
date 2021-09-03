@@ -12,6 +12,10 @@ aliases:
       name: Restore Node Modules Cache
       key: v1-node--{{ .Branch }}-{{ checksum "yarn.lock" }}-node_modules
 
+orbs:
+  # aws-ecr: circleci/aws-ecr@7.0.0
+  # aws-ecs: circleci/aws-ecs@2.2.1
+
 jobs:
   setup:
     docker: *docker
@@ -96,3 +100,32 @@ workflows:
       - test-coverage:
           requires:
             - lint
+      # - aws-ecr/build-and-push-image:
+      #     context: 
+      #       - AWS
+      #       - ECR
+      #     repo: $ECR_REPO
+      #     tag: "latest,${CIRCLE_SHA1}"
+      #     path: .
+      #     remote-docker-layer-caching: true
+      #     requires:
+      #       - test
+      #       - test-coverage
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      # - aws-ecs/deploy-service-update:
+      #     context: 
+      #       - AWS
+      #       - ECS
+      #     family: $ECS_FAMILY
+      #     cluster-name:  $ECS_CLUSTER_NAME
+      #     service-name: $ECS_SERVICE_NAME
+      #     container-image-name-updates: "container=$ECS_CONTAINER,tag=${CIRCLE_SHA1}"
+      #     requires:
+      #       - aws-ecr/build-and-push-image
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
