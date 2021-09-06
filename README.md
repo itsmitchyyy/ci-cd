@@ -7,3 +7,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * CircleCI Account
 * yarn
 
+
+## Getting started with CircleCI
+
+1. Navigate to [CircleCI](https://circleci.com/) and create an account.
+
